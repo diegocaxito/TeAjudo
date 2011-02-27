@@ -1,5 +1,0 @@
-C:\Projetos\TeAjudo\TeAjudo\TeAjudo\bin\TeAjudo.dll
-C:\Projetos\TeAjudo\TeAjudo\TeAjudo\bin\TeAjudo.pdb
-C:\Projetos\TeAjudo\TeAjudo\TeAjudo\obj\Debug\ResolveAssemblyReference.cache
-C:\Projetos\TeAjudo\TeAjudo\TeAjudo\obj\Debug\TeAjudo.dll
-C:\Projetos\TeAjudo\TeAjudo\TeAjudo\obj\Debug\TeAjudo.pdb
