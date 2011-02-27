@@ -1,8 +1,6 @@
-<h1>TeAjudo</h1>
+TeAjudo
 
-<ul>
-<li>TeAjudo - Códigos fontes do projeto</li>
-<li>Bibliotecas - Pasta com as bibliotecas armazenadas no projeto</li>
-</ul>
+TeAjudo - CÃ³digos fontes do projeto
+Bibliotecas - Pasta com as bibliotecas armazenadas no projeto
 
-Para mais informações sobre o projeto acesse o wiki https://github.com/diegocaxito/TeAjudo/wiki
+Para mais informaÃ§Ãµes sobre o projeto acesse o wiki https://github.com/diegocaxito/TeAjudo/wiki
