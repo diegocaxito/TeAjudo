@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using StructureMap;
 
 namespace TeAjudo
 {
@@ -31,10 +32,32 @@ namespace TeAjudo
 
         protected void Application_Start()
         {
+            ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
+            Models.Infraestrutura.IoC.StructureMapBootstrapper.Initialize();
+
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+        }
+    }
+
+    public class StructureMapControllerFactory : DefaultControllerFactory
+    {
+        protected override IController GetControllerInstance(System.Web.Routing.RequestContext requestContext, Type controllerType)
+        {
+            if (controllerType == null)
+                return null;
+
+            try
+            {
+                return ObjectFactory.GetInstance(controllerType) as IController;
+            }
+            catch (StructureMapException)
+            {
+                System.Diagnostics.Debug.WriteLine(ObjectFactory.WhatDoIHave());
+                throw;
+            }
         }
     }
 }
