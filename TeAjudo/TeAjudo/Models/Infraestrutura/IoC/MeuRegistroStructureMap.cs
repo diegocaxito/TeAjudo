@@ -25,10 +25,12 @@ namespace TeAjudo.Models.Infraestrutura.IoC
     }
 
     public class RepositoriosStructureMap : Registry {
-        public RepositoriosStructureMap() { 
-            /*
-             * Adicionar referências para repositórios aqui
-             */
+        public RepositoriosStructureMap() {
+            For<Principal.Repositorios.ITarefa>().Use<Infraestrutura.AcessoDados.Repositorios.Tarefa>();
         }
+    }
+
+    public class PrincipalRegistry : Registry { 
+        //verificar principal registry
     }
 }

@@ -11,6 +11,8 @@ using TeAjudo.Models.Principal.Modelos;
 using NHibernate.ByteCode.Castle;
 using System.Reflection;
 using System.Data;
+//using System.Configuration;
+//using System.Web.Configuration;
 
 namespace TeAjudo.Models.Infraestrutura.AcessoDados
 {
@@ -30,13 +32,24 @@ namespace TeAjudo.Models.Infraestrutura.AcessoDados
             }
         }
 
-        private Configuration AssembleConfiguration()
+        private NHibernate.Cfg.Configuration AssembleConfiguration()
         {
+            // Get the connectionStrings section.
+            System.Configuration.ConnectionStringsSection connectionStringsSection =
+                System.Web.Configuration.WebConfigurationManager.GetSection("connectionStrings")
+                as System.Configuration.ConnectionStringsSection;
+
+            // Get the connectionStrings key,value pairs collection.
+            System.Configuration.ConnectionStringSettingsCollection connectionStrings =
+                connectionStringsSection.ConnectionStrings;
+            string conexao = connectionStrings["TeAjudo"].ConnectionString;
+            
             return Fluently.Configure()
                 .Database(
                     MsSqlConfiguration
-                        .MsSql2008
-                        .ConnectionString(c => c.FromConnectionStringWithKey("ConnectionTeAjudo"))
+                        .MsSql2008                        
+                        //.ConnectionString(@"Persist Security Info=False;User ID=TeAjudo;Initial Catalog=TeAjudo;Data Source=localhost\SQLEXPRESS;Password=teajudo;")
+                        .ConnectionString(conexao)
                         .DefaultSchema("TeAjudo")
                         .DoNot.ShowSql()
                         .AdoNetBatchSize(100)
