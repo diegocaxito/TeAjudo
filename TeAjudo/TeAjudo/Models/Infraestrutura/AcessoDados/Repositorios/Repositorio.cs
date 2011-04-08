@@ -1,37 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using TeAjudo.Models.Principal.Modelos;
+using System.Linq.Expressions;
 using TeAjudo.Models.Principal.Repositorios;
 using NHibernate;
+using NHibernate.Linq;
 
 namespace TeAjudo.Models.Infraestrutura.AcessoDados.Repositorios
 {
     public abstract class Repositorio<T> : IRepositorio<T>
-        where T : Entidade
+        where T : class
     {
+        private ISession session;
         protected Repositorio(ISession session) {
-            Session = session;
+            this.session = session;
         }
 
-        protected ISession Session { get; private set; }
-
         public T PegarPeloId(Guid id) {
-            return Session.Get<T>(id);
+            return session.Get<T>(id);
         }
 
         public void Salvar(T entidade) {
-            Session.Save(entidade);
+            session.Save(entidade);
         }
 
         public IEnumerable<T> ListarTodos() {
-            var criteria = Session.CreateCriteria<T>();
+            var criteria = session.CreateCriteria<T>();
             return criteria.List<T>();
         }
 
         public void Remover(T entidade) {
-            Session.Delete(entidade);
+            session.Delete(entidade);
+        }
+
+        public INHibernateQueryable<T> Query()
+        {
+            return session.Linq<T>();
+        }
+
+        public IQueryable<T> Query(Expression<Func<T, bool>> filtro)
+        {
+            return Query().Where(filtro);
         }
     }
 }

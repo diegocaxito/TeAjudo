@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using TeAjudo.Models.Principal;
+using TeAjudo.Models.Infraestrutura.AcessoDados.Repositorios;
+using TeAjudo.Models.Principal.Repositorios;
+using TeAjudo.Models.Principal.Servicos;
 
 namespace TeAjudo.Controllers
 {
@@ -11,22 +13,25 @@ namespace TeAjudo.Controllers
     {
         //
         // GET: /Tarefa/
-        Models.Principal.Servicos.SolicitarTarefa solicitarTarefa;        
+        //SolicitarTarefa solicitarTarefa;
+        private readonly ITarefa repositorio;
 
-        public TarefaController(Models.Principal.Repositorios.ITarefa repositorioTarefa) {            
-            solicitarTarefa = new Models.Principal.Servicos.SolicitarTarefa(repositorioTarefa);
-        }
-
-        public ActionResult Index()
+        public TarefaController(ITarefa repositorioTarefa)
         {
-            return View();
+            repositorio = repositorioTarefa;
         }
+
+        //public ActionResult Index()
+        //{
+        //    return View();
+        //}
 
         [HttpPost]
         public ActionResult Solicitar(Models.Principal.Modelos.Tarefa tarefa) {
             if (ModelState.IsValid) {
+                var solicitarTarefa = new SolicitarTarefa(repositorio);
                 solicitarTarefa.Solicitar(tarefa);
-                RedirectToAction("Sucesso");
+                return View("Sucesso");
             }
             return View();
         }
@@ -34,7 +39,7 @@ namespace TeAjudo.Controllers
         [HttpGet]
         public ActionResult Solicitar()
         {
-            Models.Principal.Modelos.Tarefa tarefa = new Models.Principal.Modelos.Tarefa();
+            var tarefa = new Models.Principal.Modelos.Tarefa();
             return View(tarefa);
         }
 

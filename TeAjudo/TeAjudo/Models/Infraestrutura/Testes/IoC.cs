@@ -9,18 +9,13 @@ using TeAjudo.Models.Principal.Repositorios;
 namespace TeAjudo.Models.Infraestrutura.Testes.IoC
 {
     [TestFixture]
-    public class DependencyResolverTests
+    public class DependencyResolverTests //: InfraestruturaTesteBase
     {
-        [SetUp]
-        public void Setup()
-        {
-            Models.Infraestrutura.IoC.StructureMapBootstrapper.Initialize();
-        }
-
         [Test]
-        public void Smoke()
-        {
+        public void VerificarConteinerDeInjecaoDependencia()
+        {   
             ObjectFactory.AssertConfigurationIsValid();
         }
     }
+    
 }

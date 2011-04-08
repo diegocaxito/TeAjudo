@@ -4,32 +4,34 @@ using System.Linq;
 using System.Web;
 using NHibernate;
 
-namespace TeAjudo.Models.Infraestrutura.AcessoDados
+namespace TeAjudo.Models.Infraestrutura.AcessoDados.NHibernateConfiguration
 {
-    public interface ITransactionBoundary
+    public interface IUnitOfWork : IDisposable
     {
-        ISession CurrentSession { get; }
         void Begin();
         void Commit();
         void RollBack();
+        ISession CurrentSession { get; }
     }
 
-    public class NHibernateTransactionBoundary : ITransactionBoundary
+    public class UnitOfWork : IUnitOfWork
     {
-        private readonly ISessionSource sessionSource;
+        private readonly ISessionBuilder sessionBuilder;
         private ITransaction transaction;
         private bool begun;
         private bool disposed;
         private bool rolledBack;
 
-        public NHibernateTransactionBoundary(ISessionSource _sessionSource) {
-            sessionSource = _sessionSource;
+        public UnitOfWork(ISessionBuilder sessionSource)
+        {
+            sessionBuilder = sessionSource;
         }
 
         public void Begin()
         {
             CheckIsDisposed();
-            CurrentSession = sessionSource.CreateSession();
+            CurrentSession = sessionBuilder.CreateSession();
+
             BeginNewTransaction();
             begun = true;
         }
@@ -38,8 +40,11 @@ namespace TeAjudo.Models.Infraestrutura.AcessoDados
         {
             CheckIsDisposed();
             CheckHasBegun();
-            if (transaction.IsActive && rolledBack)
+
+            if (transaction.IsActive && !rolledBack)
+            {
                 transaction.Commit();
+            }
             BeginNewTransaction();
         }
 
@@ -47,49 +52,51 @@ namespace TeAjudo.Models.Infraestrutura.AcessoDados
         {
             CheckIsDisposed();
             CheckHasBegun();
-            if (transaction.IsActive) {
+            if (transaction.IsActive)
+            {
                 transaction.Rollback();
                 rolledBack = true;
             }
             BeginNewTransaction();
         }
 
-        public void Dispose() {
+        public ISession CurrentSession { get; private set; }
+
+        public void Dispose()
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        public ISession CurrentSession
+        private void BeginNewTransaction()
         {
-            get;
-            private set;
-        }
-
-        private void BeginNewTransaction() {
-            if (transaction != null)
+            if(transaction!=null)
                 transaction.Dispose();
             transaction = CurrentSession.BeginTransaction();
         }
 
-        protected virtual void Dispose(bool disposing) {
-            if (!begun || disposed)
+        private void Dispose(bool disposing)
+        {
+            if(!begun || disposed)
                 return;
-            if (disposing) {
+            if(disposing)
+            {
                 transaction.Dispose();
                 CurrentSession.Dispose();
             }
             disposed = true;
         }
 
-        private void CheckHasBegun() {
-            if (!begun)
-                throw new InvalidOperationException("Must call Begin() on the unit of work before committing");
+        private void CheckHasBegun()
+        {
+            if(!begun)
+                throw new InvalidOperationException("Must call Begin() on the unit of work before committing.");
         }
 
-        private void CheckIsDisposed(){
+        private void CheckIsDisposed()
+        {
             if (disposed)
                 throw new ObjectDisposedException(GetType().Name);
         }
     }
-
 }

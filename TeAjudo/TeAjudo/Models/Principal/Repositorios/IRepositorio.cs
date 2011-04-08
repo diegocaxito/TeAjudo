@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using TeAjudo.Models.Principal.Modelos;
-using NHibernate.Linq;
-using System.Linq;
 
 namespace TeAjudo.Models.Principal.Repositorios
 {
-    public interface IRepositorio<T> where T : Entidade
+    public interface IRepositorio<T> where T : class 
     {
         T PegarPeloId(Guid id);
         void Salvar(T entity);

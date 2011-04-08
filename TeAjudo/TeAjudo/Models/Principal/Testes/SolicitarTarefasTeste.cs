@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 
 namespace TeAjudo.Models.Principal.Testes
@@ -10,15 +6,15 @@ namespace TeAjudo.Models.Principal.Testes
     [TestFixture]
     public class SolicitarTarefas
     {
-        Principal.Repositorios.ITarefa repositorio;
+        Repositorios.ITarefa repositorio;
         Servicos.SolicitarTarefa servico;
         Modelos.Tarefa tarefa;
 
         [SetUp]
         public void Iniciar() {
-            repositorio = MockRepository.GenerateMock<Principal.Repositorios.ITarefa>();
-            servico = new Models.Principal.Servicos.SolicitarTarefa(repositorio);
-            tarefa = new Principal.Modelos.Tarefa { Titulo = "Primeira Solicitação", Descricao = "Solicitacao Teste" };
+            repositorio = MockRepository.GenerateMock<Repositorios.ITarefa>();
+            servico = new Servicos.SolicitarTarefa(repositorio);
+            tarefa = new Modelos.Tarefa { Titulo = "Primeira Solicitação", Descricao = "Solicitacao Teste" };
         }
 
         [Test]

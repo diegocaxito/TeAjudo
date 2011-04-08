@@ -1,36 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using StructureMap;
-using StructureMap.Configuration;
-using StructureMap.Configuration.DSL;
-using TeAjudo.Models.Infraestrutura.AcessoDados;
+﻿using StructureMap.Configuration.DSL;
 using NHibernate;
+using TeAjudo.Models.Infraestrutura.AcessoDados.NHibernateConfiguration;
 
 namespace TeAjudo.Models.Infraestrutura.IoC
 {
-    public class NHibernateStructureMap : Registry
+    public class NHibernateRegistry : Registry
     {
-        public NHibernateStructureMap() {
-            ForSingletonOf<ISessionSource>().Use<NHibernateSessionSource>();
+        public NHibernateRegistry() {
+            For<IConnectionString>().Use<ConnectionString>();
 
-            For<ISession>().Use(c => {
-                var transaction = (NHibernateTransactionBoundary)c.GetInstance<ITransactionBoundary>();
-                return transaction.CurrentSession;
-            });
+            ForSingletonOf<ISessionBuilder>().Use<SessionBuilder>();
 
-            For<ITransactionBoundary>().HybridHttpOrThreadLocalScoped().Use<NHibernateTransactionBoundary>();
+            For<IUnitOfWork>().HybridHttpOrThreadLocalScoped().Use<UnitOfWork>();
+
+            For<ISession>().Use(c =>
+                {
+                    var sessionSource = c.GetInstance<IUnitOfWork>();
+                    return sessionSource.CurrentSession;
+                });
         }
     }
 
-    public class RepositoriosStructureMap : Registry {
-        public RepositoriosStructureMap() {
-            For<Principal.Repositorios.ITarefa>().Use<Infraestrutura.AcessoDados.Repositorios.Tarefa>();
+    public class RepositoriosRegistry : Registry
+    {
+        public RepositoriosRegistry()
+        {
+            For<Principal.Repositorios.ITarefa>().Use<AcessoDados.Repositorios.Tarefa>();
         }
-    }
-
-    public class PrincipalRegistry : Registry { 
-        //verificar principal registry
     }
 }
