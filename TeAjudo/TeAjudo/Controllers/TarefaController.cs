@@ -1,45 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using TeAjudo.Models.Infraestrutura.AcessoDados.Repositorios;
+﻿using System.Web.Mvc;
+using TeAjudo.Apresentacao.Modelos;
+using TeAjudo.Models.Principal.Modelos;
 using TeAjudo.Models.Principal.Repositorios;
-using TeAjudo.Models.Principal.Servicos;
+using TeAjudo.Apresentacao.Atributos;
+using AutoMapper;
 
 namespace TeAjudo.Controllers
 {
-    public class TarefaController : Controller
+    //[AutoMap]
+    public class TarefaController : BaseController
     {
-        //
-        // GET: /Tarefa/
-        //SolicitarTarefa solicitarTarefa;
-        private readonly ITarefa repositorio;
+        private readonly ITarefaRepositorio repositorio;
 
-        public TarefaController(ITarefa repositorioTarefa)
+        public TarefaController(ITarefaRepositorio repositorioTarefa)
         {
             repositorio = repositorioTarefa;
         }
 
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
-
         [HttpPost]
-        public ActionResult Solicitar(Models.Principal.Modelos.Tarefa tarefa) {
-            if (ModelState.IsValid) {
-                var solicitarTarefa = new SolicitarTarefa(repositorio);
-                solicitarTarefa.Solicitar(tarefa);
+        //[AutoMap(typeof(Apresentacao.Modelos.Tafera), typeof(Models.Principal.Modelos.Tarefa))]
+        public ActionResult Solicitar(Apresentacao.Modelos.Tafera modelo) {
+            if (ModelState.IsValid)
+            {
+                var tarefa = new TeAjudo.Models.Principal.Modelos.Tarefa(repositorio);
+                Mapper.CreateMap<Apresentacao.Modelos.Tafera, Models.Principal.Modelos.Tarefa>();
+                Mapper.Map(modelo, tarefa);
+                tarefa.Solicitar();
                 return View("Sucesso");
             }
             return View();
         }
 
         [HttpGet]
+        [AutoMap(typeof(TeAjudo.Models.Principal.Modelos.Tarefa) ,typeof(Apresentacao.Modelos.Tafera))]
         public ActionResult Solicitar()
         {
-            var tarefa = new Models.Principal.Modelos.Tarefa();
+            var tarefa = new Tarefa(repositorio);
             return View(tarefa);
         }
 

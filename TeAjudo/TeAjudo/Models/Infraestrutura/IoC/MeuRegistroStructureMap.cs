@@ -25,7 +25,7 @@ namespace TeAjudo.Models.Infraestrutura.IoC
     {
         public RepositoriosRegistry()
         {
-            For<Principal.Repositorios.ITarefa>().Use<AcessoDados.Repositorios.Tarefa>();
+            For<Principal.Repositorios.ITarefaRepositorio>().Use<AcessoDados.Repositorios.TarefaRepositorio>();
         }
     }
 }

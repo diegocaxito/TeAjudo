@@ -35,6 +35,7 @@ namespace TeAjudo
 
             ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
             StructureMapBootstrapper.Initialize();
+            Models.Infraestrutura.Mapeamento.ConfiguracaoAutoMapper.Configurar();
         }
     }
 }

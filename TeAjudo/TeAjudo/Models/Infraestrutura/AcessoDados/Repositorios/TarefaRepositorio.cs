@@ -2,9 +2,9 @@
 
 namespace TeAjudo.Models.Infraestrutura.AcessoDados.Repositorios
 {
-    public class Tarefa : Repositorio<Principal.Modelos.Tarefa>, Principal.Repositorios.ITarefa
+    public class TarefaRepositorio : Repositorio<Principal.Modelos.Tarefa>, Principal.Repositorios.ITarefaRepositorio
     {
-        public Tarefa(ISession session) : base(session) { }
+        public TarefaRepositorio(ISession session) : base(session) { }
 
         public void Solicitar(Principal.Modelos.Tarefa tarefa)
         {

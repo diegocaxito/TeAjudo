@@ -12,11 +12,12 @@ namespace TeAjudo.Models.Infraestrutura.Testes
         [Test]
         public void Quando_entrar_dados_tarefa_e_chamar_salvar_dados_devem_ser_salvos_no_banco_de_dados()
         {
-            var tarefa = new Principal.Modelos.Tarefa
+            var repositorioTarefa = new AcessoDados.Repositorios.TarefaRepositorio(SessionBuilder.CreateSession());
+            var tarefa = new Principal.Modelos.Tarefa(repositorioTarefa)
                              {Titulo = "Novo Teste", Descricao = DateTime.Now.ToString()};
-            var repositorioTarefa = new AcessoDados.Repositorios.Tarefa(SessionBuilder.CreateSession());
-            var servico = new Principal.Servicos.SolicitarTarefa(repositorioTarefa);
-            SalvarEntidades(tarefa);
+
+            tarefa.Solicitar();
+            //SalvarEntidades(tarefa);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TeAjudo.Models.Principal.Repositorios
 {
-    public interface ITarefa
+    public interface ITarefaRepositorio
     {
         void Solicitar(Modelos.Tarefa tarefa);
     }
