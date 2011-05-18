@@ -1,6 +1,8 @@
-﻿using System.Web;
+﻿using System.Security.Principal;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.Security;
 using TeAjudo.Models.Infraestrutura.IoC;
 
 namespace TeAjudo
@@ -36,6 +38,21 @@ namespace TeAjudo
             ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
             StructureMapBootstrapper.Initialize();
             Models.Infraestrutura.Mapeamento.ConfiguracaoAutoMapper.Configurar();
+        }
+
+        protected void Application_AuthenticateRequest()
+        {
+            var authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
+            if (authCookie != null)
+            {
+                var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
+
+                var genericIdentity = new GenericIdentity(authTicket.Name, "Custom");
+                var roles = new[] { authTicket.UserData };
+                var genericPrincipal = new GenericPrincipal(genericIdentity, roles);
+
+                Context.User = genericPrincipal;
+            }
         }
     }
 }

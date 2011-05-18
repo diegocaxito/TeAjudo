@@ -4,6 +4,7 @@ using TeAjudo.Models.Principal.Modelos;
 using TeAjudo.Models.Principal.Repositorios;
 using TeAjudo.Apresentacao.Atributos;
 using AutoMapper;
+using TeAjudo.Models.Principal.Servicos;
 
 namespace TeAjudo.Controllers
 {
@@ -11,10 +12,13 @@ namespace TeAjudo.Controllers
     public class TarefaController : BaseController
     {
         private readonly ITarefaRepositorio repositorio;
+        private readonly IUsuarioRepositorio usuarioRepositorio;
+        //private readonly IServicoAutorizacao servicoAutorizacao;
 
-        public TarefaController(ITarefaRepositorio repositorioTarefa)
+        public TarefaController(ITarefaRepositorio repositorioTarefa, IUsuarioRepositorio usuarioRepositorio)
         {
             repositorio = repositorioTarefa;
+            this.usuarioRepositorio = usuarioRepositorio;
         }
 
         [HttpPost]
@@ -25,6 +29,7 @@ namespace TeAjudo.Controllers
                 var tarefa = new TeAjudo.Models.Principal.Modelos.Tarefa(repositorio);
                 Mapper.CreateMap<Apresentacao.Modelos.Tafera, Models.Principal.Modelos.Tarefa>();
                 Mapper.Map(modelo, tarefa);
+                tarefa.Usuario = usuarioRepositorio.ObterPorLogin(User.Identity.Name);
                 tarefa.Solicitar();
                 return View("Sucesso");
             }

@@ -8,10 +8,11 @@ namespace TeAjudo.Models.Infraestrutura.AcessoDados.Mapeamentos
 {
     public class TarefaMap : EntidadeMap<Tarefa>
     {
-        public TarefaMap() {
-            Id(x => x.Id).Column("IdTarefa").Unique();
+        public TarefaMap()
+        {   
             Map(x => x.Titulo);
             Map(x => x.Descricao);
+            References(x => x.Usuario);
         }
     }
 }

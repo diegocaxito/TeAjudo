@@ -21,6 +21,7 @@ namespace TeAjudo.Models.Principal.Modelos
 
         public virtual string Titulo { get; set; }
         public virtual string Descricao { get; set; }
+        public virtual Usuario Usuario { get; set; }
 
         public virtual void ValidarTitulo()
         {

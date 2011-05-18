@@ -11,7 +11,7 @@ namespace TeAjudo.Models.Infraestrutura.AcessoDados.Repositorios
     public abstract class Repositorio<T> : IRepositorio<T>
         where T : class
     {
-        private ISession session;
+        protected ISession session;
         protected Repositorio(ISession session) {
             this.session = session;
         }

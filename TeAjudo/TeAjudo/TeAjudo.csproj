@@ -107,6 +107,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\Infraestrutura\AcessoDados\Mapeamentos\ConfiguracaoModelos.cs" />
+    <Compile Include="Models\Infraestrutura\AcessoDados\Mapeamentos\UsuarioMap.cs" />
+    <Compile Include="Models\Infraestrutura\AcessoDados\Repositorios\UsuarioRepositorio.cs" />
+    <Compile Include="Models\Infraestrutura\Servicos\ServicoAutenticacao.cs" />
+    <Compile Include="Models\Infraestrutura\Testes\MapeamentoTeste.cs" />
+    <Compile Include="Models\Infraestrutura\Testes\UsuarioRepositorioTeste.cs" />
+    <Compile Include="Models\Util\DescricaoEnum.cs" />
     <Compile Include="Models\Infraestrutura\AcessoDados\Mapeamentos\EntidadeMap.cs" />
     <Compile Include="Models\Infraestrutura\AcessoDados\Mapeamentos\TarefaMap.cs" />
     <Compile Include="Models\Infraestrutura\AcessoDados\NHibernateConfiguration\NHibernateSessionSource.cs" />
@@ -123,6 +130,11 @@
     <Compile Include="Models\Infraestrutura\Testes\TesteIntegracaoBase.cs" />
     <Compile Include="Models\Infraestrutura\IoC\MeuRegistroStructureMap.cs" />
     <Compile Include="Models\Infraestrutura\IoC\StructureMapBootstrapper.cs" />
+    <Compile Include="Models\Principal\Modelos\Usuario.cs" />
+    <Compile Include="Models\Principal\Servicos\IServicoAutenticacao.cs" />
+    <Compile Include="Models\Principal\Servicos\IServicoAutorizacao.cs" />
+    <Compile Include="Models\Principal\Repositorios\IUsuarioRepositorio.cs" />
+    <Compile Include="Models\Infraestrutura\Servicos\ServicoAutorizacao.cs" />
     <Compile Include="Models\Principal\Testes\TarefaTeste.cs" />
     <Compile Include="Models\Principal\Modelos\Entidade.cs" />
     <Compile Include="Models\Principal\Repositorios\IRepositorio.cs" />
@@ -187,7 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\Principal\Servicos\" />
+    <Folder Include="Models\Infraestrutura\Seguranca\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Tarefa\Solicitar.cshtml" />

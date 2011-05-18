@@ -9,9 +9,9 @@ namespace TeAjudo.Models.Infraestrutura.AcessoDados.Mapeamentos
 {
     public abstract class EntidadeMap<TEntidade> : ClassMap<TEntidade> where TEntidade : Entidade
     {
-        //protected EntidadeMap()
-        //{
-        //    Id(x => x.Id);
-        //}
+        protected EntidadeMap()
+        {
+            Id(x => x.Id).Unique().GeneratedBy.Guid();
+        }
     }
 }

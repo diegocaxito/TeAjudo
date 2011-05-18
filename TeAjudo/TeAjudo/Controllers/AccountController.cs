@@ -8,22 +8,32 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using TeAjudo.Models;
+using TeAjudo.Models.Principal.Servicos;
 
 namespace TeAjudo.Controllers
 {
     public class AccountController : Controller
     {
 
-        public IFormsAuthenticationService FormsService { get; set; }
-        public IMembershipService MembershipService { get; set; }
+        //public IFormsAuthenticationService FormsService { get; set; }
+        //public IMembershipService MembershipService { get; set; }
 
-        protected override void Initialize(RequestContext requestContext)
+        private Models.Principal.Servicos.IServicoAutenticacao servicoAutenticacao;
+        private Models.Principal.Servicos.IServicoAutorizacao servicoAutorizacao;
+
+        public AccountController(IServicoAutenticacao servicoAutenticacao, IServicoAutorizacao servicoAutorizacao)
         {
-            if (FormsService == null) { FormsService = new FormsAuthenticationService(); }
-            if (MembershipService == null) { MembershipService = new AccountMembershipService(); }
-
-            base.Initialize(requestContext);
+            this.servicoAutenticacao = servicoAutenticacao;
+            this.servicoAutorizacao = servicoAutorizacao;
         }
+
+        //protected override void Initialize(RequestContext requestContext)
+        //{
+        //    if (FormsService == null) { FormsService = new FormsAuthenticationService(); }
+        //    if (MembershipService == null) { MembershipService = new AccountMembershipService(); }
+
+        //    base.Initialize(requestContext);
+        //}
 
         // **************************************
         // URL: /Account/LogOn
@@ -39,9 +49,9 @@ namespace TeAjudo.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (MembershipService.ValidateUser(model.UserName, model.Password))
+                if (servicoAutorizacao.ValidarUsuario(model.UserName, model.Password))
                 {
-                    FormsService.SignIn(model.UserName, model.RememberMe);
+                    servicoAutenticacao.Autenticar(model.UserName, model.RememberMe);
                     if (Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
@@ -67,44 +77,44 @@ namespace TeAjudo.Controllers
 
         public ActionResult LogOff()
         {
-            FormsService.SignOut();
+            servicoAutenticacao.Sair();
 
             return RedirectToAction("Index", "Home");
         }
 
-        // **************************************
-        // URL: /Account/Register
-        // **************************************
+        //// **************************************
+        //// URL: /Account/Register
+        //// **************************************
 
-        public ActionResult Register()
-        {
-            ViewBag.PasswordLength = MembershipService.MinPasswordLength;
-            return View();
-        }
+        //public ActionResult Register()
+        //{
+        //    ViewBag.PasswordLength = MembershipService.MinPasswordLength;
+        //    return View();
+        //}
 
-        [HttpPost]
-        public ActionResult Register(RegisterModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // Attempt to register the user
-                MembershipCreateStatus createStatus = MembershipService.CreateUser(model.UserName, model.Password, model.Email);
+        //[HttpPost]
+        //public ActionResult Register(RegisterModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        // Attempt to register the user
+        //        MembershipCreateStatus createStatus = MembershipService.CreateUser(model.UserName, model.Password, model.Email);
 
-                if (createStatus == MembershipCreateStatus.Success)
-                {
-                    FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("", AccountValidation.ErrorCodeToString(createStatus));
-                }
-            }
+        //        if (createStatus == MembershipCreateStatus.Success)
+        //        {
+        //            FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
+        //            return RedirectToAction("Index", "Home");
+        //        }
+        //        else
+        //        {
+        //            ModelState.AddModelError("", AccountValidation.ErrorCodeToString(createStatus));
+        //        }
+        //    }
 
-            // If we got this far, something failed, redisplay form
-            ViewBag.PasswordLength = MembershipService.MinPasswordLength;
-            return View(model);
-        }
+        //    // If we got this far, something failed, redisplay form
+        //    ViewBag.PasswordLength = MembershipService.MinPasswordLength;
+        //    return View(model);
+        //}
 
         // **************************************
         // URL: /Account/ChangePassword
@@ -112,8 +122,7 @@ namespace TeAjudo.Controllers
 
         [Authorize]
         public ActionResult ChangePassword()
-        {
-            ViewBag.PasswordLength = MembershipService.MinPasswordLength;
+        {  
             return View();
         }
 
@@ -121,21 +130,10 @@ namespace TeAjudo.Controllers
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordModel model)
         {
-            if (ModelState.IsValid)
-            {
-                if (MembershipService.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword))
-                {
-                    return RedirectToAction("ChangePasswordSuccess");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            ViewBag.PasswordLength = MembershipService.MinPasswordLength;
-            return View(model);
+            if (!ModelState.IsValid)
+                return View(model);
+            servicoAutorizacao.AlterarSenha(User.Identity.Name, model.OldPassword, model.NewPassword);
+            return RedirectToAction("ChangePasswordSuccess");
         }
 
         // **************************************

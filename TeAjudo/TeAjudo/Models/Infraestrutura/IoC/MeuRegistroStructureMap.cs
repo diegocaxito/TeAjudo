@@ -26,6 +26,16 @@ namespace TeAjudo.Models.Infraestrutura.IoC
         public RepositoriosRegistry()
         {
             For<Principal.Repositorios.ITarefaRepositorio>().Use<AcessoDados.Repositorios.TarefaRepositorio>();
+            For<Principal.Repositorios.IUsuarioRepositorio>().Use<AcessoDados.Repositorios.UsuarioRepositorio>();
+        }
+    }
+
+    public class ServicosRegistry : Registry
+    {
+        public ServicosRegistry()
+        {
+            For<Principal.Servicos.IServicoAutorizacao>().Use<Infraestrutura.Servicos.ServicoAutorizacao>();
+            For<Principal.Servicos.IServicoAutenticacao>().Use<Infraestrutura.Servicos.ServicoAutenticacao>();
         }
     }
 }

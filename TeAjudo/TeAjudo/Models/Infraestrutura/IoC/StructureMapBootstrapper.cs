@@ -18,6 +18,7 @@ namespace TeAjudo.Models.Infraestrutura.IoC
             ObjectFactory.Initialize(x => { 
                 x.AddRegistry(new NHibernateRegistry());
                 x.AddRegistry(new RepositoriosRegistry());
+                x.AddRegistry(new ServicosRegistry());
             });
         }
 
