@@ -10,7 +10,7 @@ namespace TeAjudo.Models.Principal.Modelos
     public class Usuario : Entidade
     {
         public virtual string Nome { get; set; }
-        public virtual string Login { get; set; }
+        public virtual string Email { get; set; }
         public virtual string Senha { get; set; }
         public virtual TipoUsuario TipoUsuario { get; set; }
     }

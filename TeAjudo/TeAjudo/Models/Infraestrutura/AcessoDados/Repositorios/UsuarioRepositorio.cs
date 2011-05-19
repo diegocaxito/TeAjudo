@@ -14,7 +14,7 @@ namespace TeAjudo.Models.Infraestrutura.AcessoDados.Repositorios
 
         public Principal.Modelos.Usuario ObterPorLogin(string login)
         {
-            return session.QueryOver<Principal.Modelos.Usuario>().And(c => c.Login == login).SingleOrDefault();
+            return session.QueryOver<Principal.Modelos.Usuario>().And(c => c.Email == login).SingleOrDefault();
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using TeAjudo.Apresentacao.Modelos;
 using TeAjudo.Models.Principal.Modelos;
 using TeAjudo.Models.Principal.Repositorios;
 using TeAjudo.Apresentacao.Atributos;
 using AutoMapper;
 using TeAjudo.Models.Principal.Servicos;
+using System.Linq;
 
 namespace TeAjudo.Controllers
 {
@@ -46,6 +48,16 @@ namespace TeAjudo.Controllers
 
         public ActionResult Sucesso() {
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult SolicitarAtendente()
+        {
+            var tarefa = new Apresentacao.Modelos.Tafera();
+            tarefa.Origem = new SelectList((from OrigemSolicitacao o in Enum.GetValues(typeof(Models.Principal.Modelos.OrigemSolicitacao))
+                                            select new { Id = o, Name = o.ToString() }));
+                
+            return View(tarefa);
         }
 
     }

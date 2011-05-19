@@ -10,34 +10,74 @@ namespace TeAjudo.Models.Principal.Modelos
     {
         private Principal.Repositorios.ITarefaRepositorio repositorio;
 
-        public Tarefa(ITarefaRepositorio repositorio)
-        {
+        public Tarefa(ITarefaRepositorio repositorio) : this()
+        {   
             this.repositorio = repositorio;
         }
 
         public Tarefa()
         {
+            erros = new StringBuilder();
         }
 
-        public virtual string Titulo { get; set; }
+        public virtual string Assunto { get; set; }
         public virtual string Descricao { get; set; }
         public virtual Usuario Usuario { get; set; }
+        public virtual OrigemSolicitacao OrigemSolicitacao { get; set; }
+        public virtual Usuario Atendente { get; set; }
 
-        public virtual void ValidarTitulo()
-        {
-            if (string.IsNullOrWhiteSpace(Titulo))
-                throw new SemTituloException();
-        }
-
-        internal class SemTituloException : ApplicationException
-        {
-            public SemTituloException() : base("Informe o título da tarefa.") { }
-        }
+        private StringBuilder erros;
 
         public virtual void Solicitar()
         {
-            this.ValidarTitulo();
+            ValidarSolicitacao();
+            VerificarErros();
             repositorio.Solicitar(this);
+        }
+
+        private void ValidarSolicitacao()
+        {
+            ValidarInstanciaRepositorio();
+            ValidarAssunto();
+        }
+
+        private void ValidarInstanciaRepositorio()
+        {
+            if (repositorio == null)
+                erros.AppendLine("Instancie o repositorio de tarefas.");
+        }
+
+        public virtual void ValidarAssunto()
+        {
+            if (string.IsNullOrWhiteSpace(Assunto))
+                erros.AppendLine("Assunto não pode ser vazio.");
+        }
+
+        private void VerificarErros()
+        {
+            if(erros.Length>0)
+                throw new ApplicationException(erros.ToString());
+        }
+
+        public virtual void SolicitarPeloAtendente()
+        {
+            ValidarSolicitacao();
+            ValidarAtendente();
+            ValidarDescricao();
+            VerificarErros();
+            repositorio.Solicitar(this);
+        }
+
+        private void ValidarDescricao()
+        {
+            if (string.IsNullOrWhiteSpace(Descricao))
+                erros.AppendLine("Descrição não pode ser vazio.");
+        }
+
+        private void ValidarAtendente()
+        {
+            if(!(Atendente!=null && Atendente.Id != Guid.Empty))
+                erros.AppendLine("Informe o atendente.");
         }
     }
 }

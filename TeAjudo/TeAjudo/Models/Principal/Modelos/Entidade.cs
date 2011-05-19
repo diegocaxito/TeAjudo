@@ -7,7 +7,7 @@ namespace TeAjudo.Models.Principal.Modelos
 {
     public abstract class Entidade
     {
-        public virtual Guid Id { get; private set; }
+        public virtual Guid Id { get; set; }
 
         public virtual bool IsPersistent
         {

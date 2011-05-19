@@ -18,7 +18,7 @@ namespace TeAjudo.Models.Infraestrutura.Testes.Mapeamento
         public void PodeRelacionarMapeamento()
         {
             new PersistenceSpecification<Principal.Modelos.Tarefa>(SessionBuilder.CreateSession())
-                .CheckProperty(c => c.Titulo, "Teste")
+                .CheckProperty(c => c.Assunto, "Teste")
                 .CheckProperty(c => c.Descricao, "Teste de descrição")
                 .VerifyTheMappings();
         }

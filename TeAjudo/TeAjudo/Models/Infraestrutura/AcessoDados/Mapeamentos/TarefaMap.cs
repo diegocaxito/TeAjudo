@@ -10,9 +10,11 @@ namespace TeAjudo.Models.Infraestrutura.AcessoDados.Mapeamentos
     {
         public TarefaMap()
         {   
-            Map(x => x.Titulo);
+            Map(x => x.Assunto);
             Map(x => x.Descricao);
+            Map(x => x.OrigemSolicitacao).CustomType(typeof(OrigemSolicitacao));
             References(x => x.Usuario);
+            References(x => x.Atendente);
         }
     }
 }

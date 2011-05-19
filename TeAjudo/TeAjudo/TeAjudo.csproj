@@ -113,6 +113,7 @@
     <Compile Include="Models\Infraestrutura\Servicos\ServicoAutenticacao.cs" />
     <Compile Include="Models\Infraestrutura\Testes\MapeamentoTeste.cs" />
     <Compile Include="Models\Infraestrutura\Testes\UsuarioRepositorioTeste.cs" />
+    <Compile Include="Models\Principal\Modelos\OrigemSolicitacao.cs" />
     <Compile Include="Models\Util\DescricaoEnum.cs" />
     <Compile Include="Models\Infraestrutura\AcessoDados\Mapeamentos\EntidadeMap.cs" />
     <Compile Include="Models\Infraestrutura\AcessoDados\Mapeamentos\TarefaMap.cs" />
@@ -210,6 +211,7 @@
   <ItemGroup>
     <None Include="nhibernate-configuration.xsd" />
     <None Include="nhibernate-mapping.xsd" />
+    <Content Include="Views\Tarefa\SolicitarAtendente.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

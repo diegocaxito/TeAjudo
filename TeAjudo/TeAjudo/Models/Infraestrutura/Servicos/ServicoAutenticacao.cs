@@ -38,7 +38,7 @@ namespace TeAjudo.Models.Infraestrutura.Servicos
         private FormsAuthenticationTicket CriarTicket(bool gerarCookiePersistente, Usuario usuario)
         {
             var grupo = usuario.TipoUsuario.PegarDescricao();
-            return new FormsAuthenticationTicket(1, usuario.Login, DateTime.Now, DateTime.Now.AddMinutes(30), gerarCookiePersistente, grupo);
+            return new FormsAuthenticationTicket(1, usuario.Email, DateTime.Now, DateTime.Now.AddMinutes(30), gerarCookiePersistente, grupo);
         }
 
         private void CriarCookie(FormsAuthenticationTicket authTicket)

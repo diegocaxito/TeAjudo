@@ -10,9 +10,9 @@ namespace TeAjudo.Models.Infraestrutura.AcessoDados.Mapeamentos
     {
         public UsuarioMap()
         {
-            Map(x => x.Login).Length(20).Unique();
-            Map(x => x.Nome).Length(100);
-            Map(x => x.Senha).Length(50);
+            Map(x => x.Email).Unique();
+            Map(x => x.Nome);
+            Map(x => x.Senha);
             Map(x => x.TipoUsuario).CustomType(typeof(TipoUsuario));
         }
     }

@@ -17,7 +17,7 @@ namespace TeAjudo.Models.Infraestrutura.Testes
                 new Models.Infraestrutura.AcessoDados.Repositorios.UsuarioRepositorio(sessao);
             var usuario = new Models.Principal.Modelos.Usuario
                               {
-                                  Login = "diego",
+                                  Email = "diegocaxito@gmail.com",
                                   Senha = "senha",
                                   Nome = "Diego",
                                   TipoUsuario = Models.Principal.Modelos.TipoUsuario.Administrador

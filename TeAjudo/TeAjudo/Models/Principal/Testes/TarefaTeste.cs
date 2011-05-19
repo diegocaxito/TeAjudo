@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
 using TeAjudo.Models.Principal.Modelos;
 
@@ -20,7 +21,7 @@ namespace TeAjudo.Models.Principal.Testes
         [Test]
         public void Solicitar_PassarTodosOsDados_ChamarRepositorio()
         {   
-            tarefa.Titulo = "teste";
+            tarefa.Assunto = "teste";
             tarefa.Solicitar();
             repositorio.AssertWasCalled(r=>r.Solicitar(tarefa));
         }
@@ -30,6 +31,62 @@ namespace TeAjudo.Models.Principal.Testes
         {
             tarefa.Solicitar();
             repositorio.AssertWasNotCalled(r=>r.Solicitar(tarefa));
+        }
+
+        [Test, ExpectedException(typeof(ApplicationException))]
+        public void Solicitar_PassarRepositorioNulo_DispararExcecao()
+        {
+            var tarefaParaRealizar = new Tarefa(null);
+            tarefaParaRealizar.Assunto = "assunto";
+            tarefaParaRealizar.Solicitar();
+        }
+
+        [Test]
+        public void SolicitarPeloAtendente_PassarTarefaCompleta_ChamarRepositorio()
+        {
+            IniciarTarefaValidaParaSolicitarPeloAtentende();
+            tarefa.SolicitarPeloAtendente();
+            repositorio.AssertWasCalled(r=>r.Solicitar(tarefa));
+        }
+
+        private void IniciarTarefaValidaParaSolicitarPeloAtentende()
+        {
+            tarefa.Atendente = new Usuario {Id = Guid.NewGuid(), Email = "diegocaxito@gmail.com"};
+            tarefa.Assunto = "Assunto";
+            tarefa.OrigemSolicitacao = OrigemSolicitacao.Telefone;
+            tarefa.Descricao = "Descricao";
+        }
+
+        [Test, ExpectedException(typeof(ApplicationException))]
+        public void SolicitarPeloAtendente_SemAtendente_DispararExcecao()
+        {
+            IniciarTarefaValidaParaSolicitarPeloAtentende();
+
+            tarefa.Atendente = null;
+
+            tarefa.SolicitarPeloAtendente();
+
+            repositorio.AssertWasNotCalled(r=>r.Solicitar(tarefa));
+        }
+
+        [Test, ExpectedException(typeof(ApplicationException))]
+        public void SolicitarPeloAtendente_SemAssunto_DispararExcecao()
+        {
+            IniciarTarefaValidaParaSolicitarPeloAtentende();
+
+            tarefa.Assunto = string.Empty;
+
+            tarefa.SolicitarPeloAtendente();
+        }
+
+        [Test, ExpectedException(typeof(ApplicationException))]
+        public void SolicitarPeloAtendente_SemDescricao_DispararExcecao()
+        {
+            IniciarTarefaValidaParaSolicitarPeloAtentende();
+
+            tarefa.Descricao = string.Empty;
+
+            tarefa.SolicitarPeloAtendente();
         }
     }
 }

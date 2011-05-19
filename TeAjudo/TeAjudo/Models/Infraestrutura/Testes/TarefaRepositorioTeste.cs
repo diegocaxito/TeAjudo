@@ -14,7 +14,7 @@ namespace TeAjudo.Models.Infraestrutura.Testes
         {
             var repositorioTarefa = new AcessoDados.Repositorios.TarefaRepositorio(SessionBuilder.CreateSession());
             var tarefa = new Principal.Modelos.Tarefa(repositorioTarefa)
-                             {Titulo = "Novo Teste", Descricao = DateTime.Now.ToString()};
+                             {Assunto = "Novo Teste", Descricao = DateTime.Now.ToString()};
 
             tarefa.Solicitar();
             //SalvarEntidades(tarefa);
